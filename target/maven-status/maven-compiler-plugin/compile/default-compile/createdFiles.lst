@@ -1,0 +1,4 @@
+com/wildcodeschool/myProjectWithDB/entities/School.class
+com/wildcodeschool/myProjectWithDB/repositories/SchoolRepository.class
+com/wildcodeschool/myProjectWithDB/MyProjectWithDbApplication.class
+com/wildcodeschool/myProjectWithDB/controllers/SchoolController.class
