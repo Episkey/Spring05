@@ -7,22 +7,14 @@ public class School {
     private String name;
     private int capacity;
     private String country;
-    private String graduate;
 
-    public School(int id, String name, int capacity, String country, String graduate) {
+
+    public School(int id, String name, int capacity, String country) {
         this.id = id;
         this.name = name;
         this.capacity = capacity;
         this.country = country;
-        this.graduate = graduate;
-    }
 
-    public String getGraduate() {
-        return graduate;
-    }
-
-    public void setGraduate(String graduate) {
-        this.graduate = graduate;
     }
 
     public int getId() {

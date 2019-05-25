@@ -18,24 +18,8 @@ public class SchoolController {
         return SchoolRepository.selectByName(countries);
     }
 
-    @PutMapping("/api/school/{id}")
-    public School update(
-            @PathVariable int id,
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) Integer capacity,
-            @RequestParam(required = false) String country,
-            @RequestParam(required = false) String graduate
-
-    ) {
-        School schools = SchoolRepository.selectById(id);
-        SchoolRepository.update(
-                id,
-                name != null ? name : schools.getName(),
-                capacity != null ? capacity : schools.getCapacity(),
-                country != null ? country : schools.getCountry(),
-                graduate != null ? graduate : schools.getGraduate()
-
-        );
-        return SchoolRepository.selectById(id);
+    @DeleteMapping("/api/school/{id}")
+    public void delete(@PathVariable int id) {
+        SchoolRepository.delete(id);
     }
 }

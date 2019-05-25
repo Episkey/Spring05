@@ -35,10 +35,9 @@ public class SchoolRepository {
                     name = resulSet.getString("name");
                     int capacity = resulSet.getInt("capacity");
                     String country = resulSet.getString("country");
-                    String graduate = resulSet.getString("graduate");
 
 
-                    schools.add(new School(id, name, capacity, country, graduate));
+                    schools.add(new School(id, name, capacity, country));
                 }
 
                 return schools;
@@ -70,9 +69,9 @@ public class SchoolRepository {
                     String name = resulSet.getString("name");
                     int capacity = resulSet.getInt("capacity");
                     String country = resulSet.getString("country");
-                    String graduate = resulSet.getString("graduate");
 
-                    return new School(id, name, capacity, country, graduate);
+
+                    return new School(id, name, capacity, country);
                 }
                 else {
                     throw new ResponseStatusException(
@@ -88,28 +87,16 @@ public class SchoolRepository {
         }
     }
 
-    public static int update(
-            int id,
-            String name,
-            int capcity,
-            String country,
-            String graduate
-    ) {
+    public static int delete(int id) {
         try(
                 Connection connection = DriverManager.getConnection(
                         DB_URL, DB_USER, DB_PASSWORD
                 );
                 PreparedStatement statement = connection.prepareStatement(
-                        "UPDATE school " +
-                                "SET name=?, capcity=?, country=?, graduate=? " +
-                                "WHERE id=?"
+                        "DELETE FROM school WHERE id=?"
                 );
         ) {
-            statement.setString(1, name);
-            statement.setInt(2, capcity);
-            statement.setString(3, country);
-            statement.setString(4, graduate);
-
+            statement.setInt(1, id);
 
             return statement.executeUpdate();
         }
