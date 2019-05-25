@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.List;
 
 @Controller
@@ -17,18 +18,24 @@ public class SchoolController {
         return SchoolRepository.selectByName(countries);
     }
 
-    @PostMapping("/api/school")
-    @ResponseStatus(HttpStatus.CREATED)
-    public School store(
-            @RequestParam String name,
-            @RequestParam int capacity,
-            @RequestParam String country
+    @PutMapping("/api/school/{id}")
+    public School update(
+            @PathVariable int id,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Integer capacity,
+            @RequestParam(required = false) String country,
+            @RequestParam(required = false) String graduate
+
     ) {
-        int idGeneratedByInsertio = SchoolRepository.insert(
-                name,
-                capacity,
-                country
+        School schools = SchoolRepository.selectById(id);
+        SchoolRepository.update(
+                id,
+                name != null ? name : schools.getName(),
+                capacity != null ? capacity : schools.getCapacity(),
+                country != null ? country : schools.getCountry(),
+                graduate != null ? graduate : schools.getGraduate()
+
         );
-        return SchoolRepository.selectById(idGeneratedByInsertio);
+        return SchoolRepository.selectById(id);
     }
 }

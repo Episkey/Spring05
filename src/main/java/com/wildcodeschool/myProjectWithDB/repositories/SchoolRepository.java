@@ -35,8 +35,10 @@ public class SchoolRepository {
                     name = resulSet.getString("name");
                     int capacity = resulSet.getInt("capacity");
                     String country = resulSet.getString("country");
+                    String graduate = resulSet.getString("graduate");
 
-                    schools.add(new School(id, name, capacity, country));
+
+                    schools.add(new School(id, name, capacity, country, graduate));
                 }
 
                 return schools;
@@ -68,8 +70,9 @@ public class SchoolRepository {
                     String name = resulSet.getString("name");
                     int capacity = resulSet.getInt("capacity");
                     String country = resulSet.getString("country");
+                    String graduate = resulSet.getString("graduate");
 
-                    return new School(id, name, capacity, country);
+                    return new School(id, name, capacity, country, graduate);
                 }
                 else {
                     throw new ResponseStatusException(
@@ -85,43 +88,30 @@ public class SchoolRepository {
         }
     }
 
-    public static int insert(
+    public static int update(
+            int id,
             String name,
-            int capacity,
-            String country
-
+            int capcity,
+            String country,
+            String graduate
     ) {
         try(
                 Connection connection = DriverManager.getConnection(
                         DB_URL, DB_USER, DB_PASSWORD
                 );
                 PreparedStatement statement = connection.prepareStatement(
-                        "INSERT INTO school (name, capacity, country) VALUES (?, ?, ?)",
-                        Statement.RETURN_GENERATED_KEYS
+                        "UPDATE school " +
+                                "SET name=?, capcity=?, country=?, graduate=? " +
+                                "WHERE id=?"
                 );
         ) {
             statement.setString(1, name);
-            statement.setInt(2, capacity);
+            statement.setInt(2, capcity);
             statement.setString(3, country);
+            statement.setString(4, graduate);
 
-            if(statement.executeUpdate() != 1) {
-                throw new ResponseStatusException(
-                        HttpStatus.INTERNAL_SERVER_ERROR, "failed to insert data"
-                );
-            }
 
-            try(
-                    ResultSet generatedKeys = statement.getGeneratedKeys();
-            ) {
-                if(generatedKeys.next()) {
-                    return generatedKeys.getInt(1);
-                }
-                else {
-                    throw new ResponseStatusException(
-                            HttpStatus.INTERNAL_SERVER_ERROR, "failed to get inserted id"
-                    );
-                }
-            }
+            return statement.executeUpdate();
         }
         catch (SQLException e) {
             throw new ResponseStatusException(
